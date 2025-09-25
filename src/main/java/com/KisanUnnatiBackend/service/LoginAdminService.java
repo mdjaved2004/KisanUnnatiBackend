@@ -22,7 +22,6 @@ public class LoginAdminService {
 
     // Login check
     public NewAdminAddEntity loginAdmin(String email, String password) {
-    	System.out.println(5);
     	
         return adminAddInformationRepo.findByEmailAndPassword(email, password);
     }

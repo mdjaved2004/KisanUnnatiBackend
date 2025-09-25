@@ -8,19 +8,21 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.KisanUnnatiBackend.dto.LoginAdminDTO;
 import com.KisanUnnatiBackend.dto.NewAdminAddDTO;
 import com.KisanUnnatiBackend.entity.NewAdminAddEntity;
 import com.KisanUnnatiBackend.service.LoginAdminService;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class LoginController {
+public class LoginAdminController {
 	@Autowired
 	private LoginAdminService loginAdminService;
 	
@@ -41,7 +43,8 @@ public class LoginController {
 	}
 
 	@GetMapping("cropManagement")
-	public String cropManagement() {
+	public String cropManagement(@RequestParam("name") String name, Model model) {
+		  model.addAttribute("name", name);
 	    return "cropsmanagement/cropManagement"; 
 	}
 	

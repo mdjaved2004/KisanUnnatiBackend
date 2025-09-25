@@ -12,9 +12,10 @@
 </head>
 <body>
 	<% 
-	   String user_email=null;
+	   String user_email=null, name=null;
 		user_email=(String)session.getAttribute("adminEmail");
-       
+	 	name = (String) request.getAttribute("name");
+	 	
      %>
 <header>
   <nav id="nav_bar">
@@ -25,6 +26,12 @@
         </a>
 
         <ul id="sidebar_left">
+        
+          <li><a href="cropManagement?name=cropManagement"  <%if("cropManagement".equals(name)||name==null){%>Style="color: blue;" <%}%>>Crops Management</a></li>
+          <li><a href="cropInformationManagement.jsp">Crops information</a></li>
+          <li><a href="#logOut">Feedback/Complain Management</a></li>
+          <li><a href="new_admin_form">Add New Admin</a></li>
+          <li><a href="#logOut">LogOut</a></li>
           <li><a href="logOut">LogOut</a></li>
         </ul>
 

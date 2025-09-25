@@ -1,6 +1,9 @@
 package com.KisanUnnatiBackend.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,8 +14,11 @@ import lombok.Data;
 @Data
 public class GetAllStateEntity {
 
-    @Id
-    private int stateId;
+	 @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    @Column(name = "stateId")
+	    private int stateId;
 
-    private String stateName;
+	 @Column(name = "stateName", nullable = false, length = 255, unique = true)
+	 private String stateName;
 }

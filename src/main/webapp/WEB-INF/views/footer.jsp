@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+    pageEncoding="UTF-8"%>
 <%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,12 +27,11 @@
 	            </ul>
 	     </div>
          <div class="information-about">
-           <p id="webnamef"><span id="Krashif">Krashi</span><span>Unnati</span><p>
+           <a  href="webName" id="webnamef"><span id="Krashif">Krashi</span><span>Unnati</span><a>
            <p>Empowering farmers with smart crop trading and trusted agriculture information.
 				Buy, sell, and stay informed — all in one place.</p>
          </div>
 	      
-	          
          <div class="information-contact">
            <p class="topicInfo">Contact Us</p>
            <p>Email: mdjavedmansoori22@gmail.com</p>

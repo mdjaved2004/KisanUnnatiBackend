@@ -9,9 +9,11 @@
 body {
 	background-image: linear-gradient(to right, #8db38a, #c4e0e0, #a4e2a4, #e2e298);
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
+	width: calc(100vw - 16.1rem);
+}
+#main{
+  justify-content: center;
+  align-items: center;  
 }
 form {
   min-width:450px;
@@ -23,6 +25,7 @@ form {
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
+  z-index: -1;
 }
 .heading{
 	text-align: center;
@@ -73,7 +76,7 @@ input:focus {
 
 
 input[type="submit"], .submit {
-  width: 100%;
+  width: 95%;
   padding: 12px;
   background: #007BFF;
   border: none;
@@ -134,3 +137,16 @@ input[type="submit"]:hover, .submit:hover {
   background-color: #fff;
   display: none; 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

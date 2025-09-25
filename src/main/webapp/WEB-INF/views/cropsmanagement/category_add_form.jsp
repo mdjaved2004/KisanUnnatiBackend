@@ -8,6 +8,10 @@
 <link href="css/form.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<header>
+			<jsp:include page="../navigation_bar.jsp" />
+	</header>
+	<main id=main>
         <form action="addNewCategory" method="post">
         	<p class="heading">Add New Category</p>
 			<div class="form-group">
@@ -19,5 +23,6 @@
 			</div>
 			<input type="submit" value="Submit">
         </form>
+        </main>
 </body>
 </html>
