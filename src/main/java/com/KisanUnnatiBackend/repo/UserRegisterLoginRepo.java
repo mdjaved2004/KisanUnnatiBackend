@@ -13,7 +13,9 @@ import com.KisanUnnatiBackend.entity.UserRegisterLoginEntity;
 public interface UserRegisterLoginRepo extends JpaRepository<UserRegisterLoginEntity, Integer> {
     boolean existsByEmail(String email); // check duplicate email
     
-    // Find user by email AND password
     Optional<UserRegisterLoginEntity> findByEmailAndPassword(String email, String password);
+    
+    Optional<UserRegisterLoginEntity> findByEmail(String email);
 
 }
+

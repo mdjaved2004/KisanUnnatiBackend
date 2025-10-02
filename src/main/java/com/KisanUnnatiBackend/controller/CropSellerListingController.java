@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.KisanUnnatiBackend.dto.CropSellerListingDTO;
-import com.KisanUnnatiBackend.entity.CropSellerListingEntity;
 import com.KisanUnnatiBackend.service.CropSellerListingService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class CropSellerListingController {
 
 //        CropSellerListingEntity savedCrop = 
         		try {
-					String message=cropSellerListing.addCrop(cropDTO, imageFile, session);
+					String message=cropSellerListing.addSellingCrop(cropDTO, imageFile, session);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -58,9 +57,9 @@ public class CropSellerListingController {
     }
 
     // Get all crops
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllCrops() {
-        List<CropSellerListingEntity> crops = cropSellerListing.getAllCrops();
-        return ResponseEntity.ok(crops);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<?> getAllCrops() {
+//        List<CropSellerListingEntity> crops = cropSellerListing.getAllCrops();
+//        return ResponseEntity.ok(crops);
+//    }
 }
