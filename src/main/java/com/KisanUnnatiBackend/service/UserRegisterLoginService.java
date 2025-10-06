@@ -1,13 +1,15 @@
 package com.KisanUnnatiBackend.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +24,7 @@ public class UserRegisterLoginService {
 	
 	@Autowired
     private UserRegisterLoginRepo userRegisterRepo;
-	
+
 	@Autowired
 	private  CropSellerListingRepository cropSellerListingRepository;
 	
@@ -44,7 +46,7 @@ public class UserRegisterLoginService {
 	    UserRegisterLoginEntity userRegEntity = new UserRegisterLoginEntity();
 	    userRegEntity.setName(dto.getName());
 	    userRegEntity.setEmail(dto.getEmail());
-	    userRegEntity.setPassword(dto.getPassword()); // TODO: hash password
+	    userRegEntity.setPassword(dto.getPassword()); 
 	    userRegEntity.setJoiningDate(LocalDate.now());
 	    userRegEntity.setPosition(3); // default
 
@@ -66,15 +68,8 @@ public class UserRegisterLoginService {
 	    //Add user to response map
 	    responseMap.put("user", savedUser);
 	    
-	    CropBuyingServiceOnlyGet sellingListget = new CropBuyingServiceOnlyGet(cropSellerListingRepository);
-    	List<Object[]> byCity = sellingListget.buyingCropCityVice(state, district, cityVillage);    
-    	List<Object[]> byDistrict = sellingListget.buyingCropDistrictVice(state, district, cityVillage);  	
-    	List<Object[]> byState =sellingListget.buyingCropStateVice(state, district, cityVillage);
-	   
-    	responseMap.put("byCity", byCity);
-	    responseMap.put("byDistrict", byDistrict);
-	    responseMap.put("byState", byState);
-
+	    // add list to buying information
+    	responseMap.put("buyingCropInfo", buyingCropInformation(state, district, cityVillage));
 	    return responseMap;
 	}
 	
@@ -98,18 +93,48 @@ public class UserRegisterLoginService {
 	        	cityVillage=usercontactInfo.getCity();
 	        	
 	        	responseMap.put("user", userLoginInfo);
-	            CropBuyingServiceOnlyGet sellingListget = new CropBuyingServiceOnlyGet(cropSellerListingRepository);
-	        	List<Object[]> byCity = sellingListget.buyingCropCityVice(state, district, cityVillage);    
-	        	List<Object[]> byDistrict = sellingListget.buyingCropDistrictVice(state, district, cityVillage);  	
-	        	List<Object[]> byState =sellingListget.buyingCropStateVice(state, district, cityVillage);
-	    	   
-	        	responseMap.put("byCity", byCity);
-	    	    responseMap.put("byDistrict", byDistrict);
-	    	    responseMap.put("byState", byState);
+	        	
+	    	    // add list to buying information
+	        	responseMap.put("buyingCropInfo", buyingCropInformation(state, district, cityVillage));
 	    	    return responseMap;
 	        } else {
 	            throw new RuntimeException("Invalid email or password");
 	        }
 	    }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   public List<Object[]> buyingCropInformation(String state, String district, String city){
+		   List<Object[]> buyingCropInfo= new ArrayList<>();
+		   int lengthBuyingCropInfo=7;
+		   Pageable limit = PageRequest.of(0, 4); 
+		   
+		   buyingCropInfo = cropSellerListingRepository.buyingCropCityVice(city, district, state, limit);
+		   
+
+		   
+		   lengthBuyingCropInfo=7-buyingCropInfo.size();
+//		   System.out.println(".............city.............."+ buyingCropInfo.size());
+	       limit = PageRequest.of(0, lengthBuyingCropInfo); 
+	       
+	      
+	    	 
+	    
+	       
+	       buyingCropInfo.addAll(cropSellerListingRepository.buyingCropDistrictVice(city, district, state, limit));
+//	       System.out.println(".............District.............."+ buyingCropInfo.size());
+	       if(buyingCropInfo.size()<7) {
+	    	   lengthBuyingCropInfo=7-buyingCropInfo.size();
+	    	   limit = PageRequest.of(0, lengthBuyingCropInfo);
+	    	   buyingCropInfo.addAll(cropSellerListingRepository.buyingCropStateVice(city, district, state, limit));
+//	    	   System.out.println(".............state.............."+ buyingCropInfo.size());
+	       }
+		   return buyingCropInfo;
+	   }
 	   
 }

@@ -39,7 +39,7 @@ public class UserRegisterLoginController {
 
         List<String> errorList = new ArrayList<>();
 
-        // 1️⃣ Validation errors
+        // Validation errors
         if (bindingResult.hasErrors()) {
             for (ObjectError error : bindingResult.getAllErrors()) {
                 errorList.add(error.getDefaultMessage());
@@ -48,16 +48,16 @@ public class UserRegisterLoginController {
         }
 
         try {
-            // 2️⃣ Password match check
+            //Password match check
             if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("errors", "Password and confirmPassword do not match"));
             }
 
-            // 3️⃣ Call service layer
+            //Call service layer
             Map<String, Object> information = userRegisterService.registerUser(userRegisterDTO);
 
-            // 4️⃣ Set session attributes
+            //Set session attributes
             UserRegisterLoginEntity userInfo = (UserRegisterLoginEntity) information.get("user");
             if (userInfo != null) {
                 UserContactdetailsEntity userContactId = userInfo.getUserContactId();
@@ -74,9 +74,7 @@ public class UserRegisterLoginController {
                 return ResponseEntity.ok(Map.of(
                         "message", "User registered successfully",
                         "user", sessionUserMap,
-                        "byCity", information.get("byCity"),
-                        "byDistrict",information.get("byDistrict"),
-                        "byState", information.get("byState")
+                        "buyingCropInfo", information.get("buyingCropInfo")
                 ));
             } else {
                 return ResponseEntity.ok(Map.of(
@@ -93,9 +91,9 @@ public class UserRegisterLoginController {
 
 
     // ------------------- LOGIN -------------------
-    @PostMapping("/login") 
+    @PostMapping(value = "/login", produces = "application/json") 
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO, BindingResult bindingResult, HttpSession session) {
-
+    	System.out.println("bhn hjdjnjs================");
         List<String> errorList = new ArrayList<>();
         //Handle validation errors
         if (bindingResult.hasErrors()) {
@@ -127,9 +125,7 @@ public class UserRegisterLoginController {
                 return ResponseEntity.ok(Map.of(
                         "message", "Login successful",
                         "user", sessionUserMap,
-                        "byCity", information.get("byCity"),
-                        "byDistrict",information.get("byDistrict"),
-                        "byState", information.get("byState")
+                        "buyingCropInfo", information.get("buyingCropInfo")
                 ));
             } else {
                 return ResponseEntity.badRequest().body(Map.of(
