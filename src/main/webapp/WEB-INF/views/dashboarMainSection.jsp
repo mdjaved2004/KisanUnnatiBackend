@@ -18,7 +18,7 @@
 		    </a>
 		  </td>
 		</tr>
-		<tr>
+		<!-- <tr>
 		  <td>Management of crops</td>
 		  <td>:</td>
 		  <td>
@@ -27,7 +27,7 @@
 		    </a>
 		  </td>
 		</tr>
-		<tr>
+		<tr> -->
 		  <td>Feedback/Complain Management</td>
 		  <td>:</td>
 		  <td>

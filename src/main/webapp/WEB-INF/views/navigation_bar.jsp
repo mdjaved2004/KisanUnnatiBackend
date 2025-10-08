@@ -27,11 +27,10 @@
 
         <ul id="sidebar_left">
         
-          <li><a href="cropManagement?name=cropManagement"  <%if("cropManagement".equals(name)||name==null){%>Style="color: blue;" <%}%>>Crops Management</a></li>
-          <li><a href="cropInformationManagement.jsp">Crops information</a></li>
+          <li><a href="cropInformationManagement"  <%-- <%if("cropManagement".equals(name)||name==null){%>Style="color: blue;" <%}%> --%>>Crops information Management</a></li>
+         <!--  <li><a href="cropInformationManagement.jsp">Crops information</a></li> -->
           <li><a href="#logOut">Feedback/Complain Management</a></li>
           <li><a href="new_admin_form">Add New Admin</a></li>
-          <li><a href="#logOut">LogOut</a></li>
           <li><a href="logOut">LogOut</a></li>
         </ul>
 

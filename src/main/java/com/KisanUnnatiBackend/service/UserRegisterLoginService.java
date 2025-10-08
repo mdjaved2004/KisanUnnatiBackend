@@ -34,6 +34,9 @@ public class UserRegisterLoginService {
 	
 	@Autowired
 	private  CropSellerListingRepository cropSellerListingRepository;
+	 
+	@Autowired
+	private  FeedbackService feedbackService;
 	
 	@Transactional
 	public Map<String, Object> registerUser(UserRegisterDTO dto) {
@@ -80,6 +83,9 @@ public class UserRegisterLoginService {
     	
     	// add list to crop information
     	responseMap.put("cropInformation", cropInformation(state));
+    	
+    	// add list to feedback
+    	responseMap.put("feedback", feedbackService.getFeedBack());
 	    return responseMap;
 	}
 	
@@ -110,6 +116,8 @@ public class UserRegisterLoginService {
 	        	// add list to crop information
 	        	responseMap.put("cropInformation", cropInformation(state));
 	        	
+	        	// add list to feedback
+	        	responseMap.put("feedback", feedbackService.getFeedBack());
 	        	return responseMap;
 	        } else {
 	            throw new RuntimeException("Invalid email or password");
@@ -159,12 +167,10 @@ public class UserRegisterLoginService {
 	   }
 	   
 	   public List<Object[]> cropInformation(String state){
-		   System.out.println("======================================7485");
 		   List<Object[]> cropInformation=addNewCropInfoRepo.findCropsByStateAsObject(state);
 		   if(cropInformation==null) {
 			   return null;
 		   }
 		   return cropInformation;
 	   }
-	   
 }

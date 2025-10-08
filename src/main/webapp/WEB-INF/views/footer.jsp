@@ -19,11 +19,11 @@
 		 <div class="information-links">
 	            <p class="topicInfo">Quick Links</p>
 	            <ul>
-	              <li><a href="index.jsp">Home</a></li>
+	              <li><a href="webName">Home</a></li>
+	              <!-- <li><a href="#">krashi</a></li>
 	              <li><a href="#">krashi</a></li>
 	              <li><a href="#">krashi</a></li>
-	              <li><a href="#">krashi</a></li>
-	              <li><a href="#">krashi</a></li>
+	              <li><a href="#">krashi</a></li> -->
 	            </ul>
 	     </div>
          <div class="information-about">

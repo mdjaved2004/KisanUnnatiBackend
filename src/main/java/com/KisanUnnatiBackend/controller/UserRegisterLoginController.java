@@ -32,9 +32,7 @@ public class UserRegisterLoginController {
     private final UserRegisterLoginService userRegisterService;
     
     @PostMapping("/register")
-    public ResponseEntity<?> register(
-            @Valid @RequestBody UserRegisterDTO userRegisterDTO,
-            BindingResult bindingResult,
+    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult,
             HttpSession session) {
 
         List<String> errorList = new ArrayList<>();
@@ -64,6 +62,7 @@ public class UserRegisterLoginController {
 
                 session.setAttribute("userName", userInfo.getName());
                 session.setAttribute("userEmail", userInfo.getEmail());
+                session.setAttribute("userContactId", userContactId.getUserContactId());
                 session.setAttribute("userState", userContactId.getStateName());
                 session.setAttribute("userDistrict", userContactId.getDistrict());
                 session.setAttribute("userCity", userContactId.getCity());
@@ -76,7 +75,8 @@ public class UserRegisterLoginController {
                         "message", "User registered successfully",
                         "user", sessionUserMap,
                         "buyingCropInfo", information.get("buyingCropInfo"),
-                        "cropInformation", information.get("cropInformation")
+                        "cropInformation", information.get("cropInformation"),
+                        "feedback",information.get("feedback")
                 ));
             } else {
                 return ResponseEntity.ok(Map.of(
@@ -117,6 +117,7 @@ public class UserRegisterLoginController {
                 //Set session attributes
                 session.setAttribute("userName", user.getName());
                 session.setAttribute("userEmail", user.getEmail());
+                session.setAttribute("userContactId", userContactId.getUserContactId());
                 session.setAttribute("userState", userContactId.getStateName());
                 session.setAttribute("userDistrict", userContactId.getDistrict());
                 session.setAttribute("userCity", userContactId.getCity());
@@ -129,7 +130,8 @@ public class UserRegisterLoginController {
                         "message", "Login successful",
                         "user", sessionUserMap,
                         "buyingCropInfo", information.get("buyingCropInfo"),
-                        "cropInformation", information.get("cropInformation")
+                        "cropInformation", information.get("cropInformation"),
+                        "feedback",information.get("feedback")
                 ));
             } else {
                 return ResponseEntity.badRequest().body(Map.of(
