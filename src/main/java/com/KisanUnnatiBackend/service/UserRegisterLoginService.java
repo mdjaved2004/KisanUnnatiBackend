@@ -19,6 +19,7 @@ import com.KisanUnnatiBackend.dto.NewAdminAddDTO;
 import com.KisanUnnatiBackend.dto.UserRegisterDTO;
 import com.KisanUnnatiBackend.entity.UserContactdetailsEntity;
 import com.KisanUnnatiBackend.entity.UserRegisterLoginEntity;
+import com.KisanUnnatiBackend.repo.AddNewCropInfoRepo;
 import com.KisanUnnatiBackend.repo.CropSellerListingRepository;
 import com.KisanUnnatiBackend.repo.UserRegisterLoginRepo;
 
@@ -27,7 +28,10 @@ public class UserRegisterLoginService {
 	
 	@Autowired
     private UserRegisterLoginRepo userRegisterRepo;
-
+	
+	@Autowired
+	private AddNewCropInfoRepo addNewCropInfoRepo;
+	
 	@Autowired
 	private  CropSellerListingRepository cropSellerListingRepository;
 	
@@ -73,6 +77,9 @@ public class UserRegisterLoginService {
 	    
 	    // add list to buying information
     	responseMap.put("buyingCropInfo", buyingCropInformation(state, district, cityVillage));
+    	
+    	// add list to crop information
+    	responseMap.put("cropInformation", cropInformation(state));
 	    return responseMap;
 	}
 	
@@ -99,7 +106,11 @@ public class UserRegisterLoginService {
 	        	
 	    	    // add list to buying information
 	        	responseMap.put("buyingCropInfo", buyingCropInformation(state, district, cityVillage));
-	    	    return responseMap;
+	    	    
+	        	// add list to crop information
+	        	responseMap.put("cropInformation", cropInformation(state));
+	        	
+	        	return responseMap;
 	        } else {
 	            throw new RuntimeException("Invalid email or password");
 	        }
@@ -131,17 +142,11 @@ public class UserRegisterLoginService {
 		   Pageable limit = PageRequest.of(0, 4); 
 		   
 		   buyingCropInfo = cropSellerListingRepository.buyingCropCityVice(city, district, state, limit);
-		   
-
-		   
+		   	   
 		   lengthBuyingCropInfo=7-buyingCropInfo.size();
 //		   System.out.println(".............city.............."+ buyingCropInfo.size());
 	       limit = PageRequest.of(0, lengthBuyingCropInfo); 
-	       
-	      
-	    	 
-	    
-	       
+	       	       
 	       buyingCropInfo.addAll(cropSellerListingRepository.buyingCropDistrictVice(city, district, state, limit));
 //	       System.out.println(".............District.............."+ buyingCropInfo.size());
 	       if(buyingCropInfo.size()<7) {
@@ -151,6 +156,15 @@ public class UserRegisterLoginService {
 //	    	   System.out.println(".............state.............."+ buyingCropInfo.size());
 	       }
 		   return buyingCropInfo;
+	   }
+	   
+	   public List<Object[]> cropInformation(String state){
+		   System.out.println("======================================7485");
+		   List<Object[]> cropInformation=addNewCropInfoRepo.findCropsByStateAsObject(state);
+		   if(cropInformation==null) {
+			   return null;
+		   }
+		   return cropInformation;
 	   }
 	   
 }

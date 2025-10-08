@@ -53,37 +53,4 @@ public class BuyingCropInformationController {
 		
 	 }
 	
-//	 @PostMapping(value="/buyingCropsInfoAgain", produces = "application/json")
-//	 public ResponseEntity<?> buyingCropsInfoAgain(@Valid @RequestBody BuyingCropInformationDto buyingCropInformationDto,BindingResult bindingResult,
-//	            HttpSession session) {
-//		String userName=null, userEmail=null, userState=null, userDistrict=null, userCity=null, userAddress=null;
-//		
-//		userName=(String) session.getAttribute("userName");
-//		userEmail=(String)session.getAttribute("userEmail");
-//		userState=(String)session.getAttribute("userState");
-//		userDistrict=(String)session.getAttribute("userDistrict");
-//		userCity=(String)session.getAttribute("userCity");
-//		userAddress=(String)session.getAttribute("userAddress");
-//		if(userName==null || userEmail==null || userState==null || userDistrict==null || userCity==null || userAddress==null) {
-//			return ResponseEntity.ok(Map.of(
-//	                "message", "you are not loging, click to login"
-//					));    
-//		}else {
-//			Map<String, Object> buyingCropInformation = buyingCropInformationService.buyingCropInformation(userState, userDistrict, userCity);
-//			
-//			return ResponseEntity.ok(Map.of(
-//					"message", "User registered successfully",
-//					"buyingCropInfo", buyingCropInformation
-//					));
-//		}
-//		
-//	 }
-	
-	
-	
-	
-	
-	
-	
-
 }

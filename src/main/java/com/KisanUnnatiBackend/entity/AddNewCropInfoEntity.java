@@ -22,10 +22,6 @@ public class AddNewCropInfoEntity {
 	@Column(name = "date", nullable = false)
 	private LocalDate date;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "categoryId", referencedColumnName = "categoryId", nullable = false)
-	private AddCategoryEntity categoryId;
-
 	@Column(name = "adminId", nullable = false)
 	private int adminId;
 
@@ -38,7 +34,7 @@ public class AddNewCropInfoEntity {
 	@Column(name = "state", nullable = false)
 	private String state;
 
-	@Column(name = "deletedDate")
+	@Column(name = "deletedDate", nullable = true)
 	private LocalDate deletedDate;
     
 	@Column(name = "fileLink", nullable = true)
@@ -50,5 +46,8 @@ public class AddNewCropInfoEntity {
 	@Column(name = "display", nullable = false)
 	private boolean display = true;
  
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categoryId", referencedColumnName = "categoryId", nullable = false)
+	private AddCategoryEntity categoryId;
 }
 

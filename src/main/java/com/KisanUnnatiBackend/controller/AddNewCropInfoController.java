@@ -30,7 +30,7 @@ import com.KisanUnnatiBackend.service.StateName;
 //import com.KisanUnnatiBackend.service.GetAllStateservice;
 
 @Controller
-public class CropInfoAddNewCropAndCategoryController {
+public class AddNewCropInfoController {
 	 
 	@Autowired
 	private AddCategoryService addCategoryService;
@@ -43,55 +43,7 @@ public class CropInfoAddNewCropAndCategoryController {
 	    return "cropInformationManagement/cropInformationManagement"; 
 	}
 	
-	
-	@GetMapping("/addCategoryInfoForm")
-    public String addCategoryInfoForm(Model model){
-        List<GetAllCategoryOfCropsDTO> allCategoryOfCrops = addCategoryService.getAllCategoryOfCrops();
-        model.addAttribute("categoryList", allCategoryOfCrops);
-        return "cropInformationManagement/addNewCategoryInfoForm";
-    }
-	
-	@PostMapping("/addNewCategoryInfo")
-	public String addNewCategoryInfo(
-	        @Valid @ModelAttribute AddCategoryDTO addCategoryDTO,
-	        BindingResult bindingResult,
-	        Model model,
-	        HttpSession session) {
-
-	    List<GetAllCategoryOfCropsDTO> allCategoryOfCrops = addCategoryService.getAllCategoryOfCrops();
-	    model.addAttribute("categoryList", allCategoryOfCrops);
-
-	    if (bindingResult.hasErrors()) {
-	        return "cropInformationManagement/addNewCategoryInfoForm";
-	    }
-
-	    try {
-	        int adminId = (Integer) session.getAttribute("adminId");
-	        boolean added = addCategoryService.newCategoryAdd(addCategoryDTO.getCategory(), adminId);
-
-	        if (added) {
-	            model.addAttribute("message", "Category added successfully");
-	        } else {
-	            model.addAttribute("errorMessage", "Category already exists or could not be added");
-	        }
-	    } catch (Exception e) {
-	        model.addAttribute("errorMessage", "Error occurred while adding category");
-	        e.printStackTrace();
-	    }
-	    return "cropInformationManagement/cropInformationManagement";
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	@GetMapping("/addNewCropsInfoForm")
     public String addNewCropsform(Model model){
         List<GetAllCategoryOfCropsDTO> allCategoryOfCrops = addCategoryService.getAllCategoryOfCrops();

@@ -75,7 +75,8 @@ public class UserRegisterLoginController {
                 return ResponseEntity.ok(Map.of(
                         "message", "User registered successfully",
                         "user", sessionUserMap,
-                        "buyingCropInfo", information.get("buyingCropInfo")
+                        "buyingCropInfo", information.get("buyingCropInfo"),
+                        "cropInformation", information.get("cropInformation")
                 ));
             } else {
                 return ResponseEntity.ok(Map.of(
@@ -127,7 +128,8 @@ public class UserRegisterLoginController {
                 return ResponseEntity.ok(Map.of(
                         "message", "Login successful",
                         "user", sessionUserMap,
-                        "buyingCropInfo", information.get("buyingCropInfo")
+                        "buyingCropInfo", information.get("buyingCropInfo"),
+                        "cropInformation", information.get("cropInformation")
                 ));
             } else {
                 return ResponseEntity.badRequest().body(Map.of(

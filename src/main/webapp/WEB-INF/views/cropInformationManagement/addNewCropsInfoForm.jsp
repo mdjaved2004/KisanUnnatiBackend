@@ -53,8 +53,8 @@
 			
 			 <div class="form-group">
 			        <label for="file_input">Upload File:</label>
-			        <input type="file" id="file_input" name="file_input" accept=".txt" required>
-			        <small>Only .txt and .pdf files allowed.</small>
+			        <input type="file" id="file_input" name="file_input" accept=".txt, .pdf" required>
+			        <small>Only .txt and .pdf(plain text) files allowed.</small>
 			   </div>
 			<button type="submit" class="submit">Submit</button>
 	       </form>
