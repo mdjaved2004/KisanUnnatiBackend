@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.KisanUnnatiBackend.dto.NewAdminAddDTO;
 import com.KisanUnnatiBackend.dto.UserRegisterDTO;
 import com.KisanUnnatiBackend.entity.UserContactdetailsEntity;
 import com.KisanUnnatiBackend.entity.UserRegisterLoginEntity;
@@ -104,9 +107,22 @@ public class UserRegisterLoginService {
 	   
 	   
 	   
+	   public Optional<UserRegisterLoginEntity> loginAdmin(String email, String password) {
+		   Optional<UserRegisterLoginEntity> optionalUser =userRegisterRepo.findByEmailAndPassword(email, password);
+		   if (optionalUser.isPresent()) {	        	
+	    	    return optionalUser;
+	        } else {
+	            throw new RuntimeException("Invalid email or password");
+	        }
+	    }
 	   
 	   
-	   
+	   public boolean newAdminAdd(int adminId, NewAdminAddDTO newAdminAddDTO) {
+           
+		   int rows = userRegisterRepo.updatePositionByEmailAndPassword(newAdminAddDTO.getPosition(), adminId, newAdminAddDTO.getEmail(), newAdminAddDTO.getPassword());
+		   return rows > 0;
+		  
+	   }
 	   
 	   
 	   public List<Object[]> buyingCropInformation(String state, String district, String city){

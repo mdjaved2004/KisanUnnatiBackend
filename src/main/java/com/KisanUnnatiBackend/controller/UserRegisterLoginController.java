@@ -68,6 +68,7 @@ public class UserRegisterLoginController {
                 session.setAttribute("userDistrict", userContactId.getDistrict());
                 session.setAttribute("userCity", userContactId.getCity());
                 session.setAttribute("userAddress", userContactId.getAddress());
+                session.setAttribute("userMobileNumber", userContactId.getMobileNumber());
 
                 Map<String, Object> sessionUserMap = getSessionUserMap(session);
                 System.out.println("===============successful==================");
@@ -119,6 +120,7 @@ public class UserRegisterLoginController {
                 session.setAttribute("userDistrict", userContactId.getDistrict());
                 session.setAttribute("userCity", userContactId.getCity());
                 session.setAttribute("userAddress", userContactId.getAddress());
+                session.setAttribute("userMobileNumber", userContactId.getMobileNumber());
 
                 Map<String, Object> sessionUserMap = getSessionUserMap(session);
                 System.out.println("===============successful==================");
@@ -147,6 +149,7 @@ public class UserRegisterLoginController {
         userMap.put("userDistrict", session.getAttribute("userDistrict"));
         userMap.put("userCity", session.getAttribute("userCity"));
         userMap.put("userAddress", session.getAttribute("userAddress"));
+        userMap.put("userMobileNumber", session.getAttribute("userMobileNumber"));
         return userMap;
     }
 

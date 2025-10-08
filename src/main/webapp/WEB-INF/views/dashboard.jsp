@@ -11,15 +11,16 @@
 <body>
 <%
 /* 		model.addAttribute("errorList", "Succesfull login"); */
-	String adminEmail=null, adminId=null, adminName=null, adminPosition=null;	
+	String adminEmail=null, adminId=null, adminName=null;
+	int adminPosition=3;	
 	if (session.getAttribute("adminEmail")!= null) {
 		adminEmail=(String)session.getAttribute("adminEmail");
 		adminName=(String)session.getAttribute("adminName");
-		adminPosition=(String)session.getAttribute("adminPosition");
-		adminId=(String)session.getAttribute("adminId");
+		adminPosition=(Integer)session.getAttribute("adminPosition");
+		adminId=String.valueOf(session.getAttribute("adminId"));
 	}
 %>
-<%if(adminEmail !=null && adminName !=null && adminPosition !=null && adminId !=null){ %>
+<%if(adminEmail !=null && adminName !=null && adminPosition<=2 && adminId !=null){ %>
 	<header>
 			<jsp:include page="navigation_bar.jsp" />
 	</header>
@@ -41,7 +42,7 @@
 	<jsp:include page="footer.jsp" />
 	
 <%}else{ %>
-	<p>Something went wrong</p>
+	<p>Something went wrong, You are login</p>
 <% }%>	
 </body>
 </html>

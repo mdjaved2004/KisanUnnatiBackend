@@ -10,20 +10,20 @@
 <body>
 	<table class="admin-table">
 		<tr>
+		  <td>Crops information Management</td>
+		  <td>:</td>
+		  <td>
+		    <a href="cropInformationManagement" class="btn-link">
+		      <button class="btn">Manage Info</button>
+		    </a>
+		  </td>
+		</tr>
+		<tr>
 		  <td>Management of crops</td>
 		  <td>:</td>
 		  <td>
 		    <a href="cropManagement?name=cropManagement" class="btn-link">
 		      <button class="btn">Manage</button>
-		    </a>
-		  </td>
-		</tr>
-		<tr>
-		  <td>Crops information Management</td>
-		  <td>:</td>
-		  <td>
-		    <a href="cropInformationManagement.jsp" class="btn-link">
-		      <button class="btn">Info</button>
 		    </a>
 		  </td>
 		</tr>

@@ -10,7 +10,7 @@ import lombok.Data;
 
 
 @Data
-public class AddNewCropDTO {
+public class AddNewCropInfoDTO {
 	
 	@NotNull(message = "Category ID is required.")
 	@Min(value = 1, message = "Category ID must be greater than 0.")
@@ -24,16 +24,8 @@ public class AddNewCropDTO {
 	)
 	private String cropName;
 
+	@NotBlank(message = "State is required.")
+	@Size(min = 2, max = 100, message = "State must be between 2 and 100 characters")
+	private String state;
 
-	@NotNull(message = "Price is required.")
-	@Min(value = 0, message = "Price must be zero or positive.")
-	private int price;
-
-	@NotNull(message = "Country ID is required.")
-	@Min(value = 1, message = "Country ID must be greater than 0.")
-	private int country;
-
-	@NotNull(message = "State ID is required.")
-	@Min(value = 1, message = "State ID must be greater than 0.")
-	private int state;
 }

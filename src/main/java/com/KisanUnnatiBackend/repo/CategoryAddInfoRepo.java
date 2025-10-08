@@ -10,11 +10,11 @@ import com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO;
 import com.KisanUnnatiBackend.entity.AddCategoryEntity;
 
 @Repository
-public interface AddCategoryRepo extends JpaRepository<AddCategoryEntity, Integer> {
+public interface CategoryAddInfoRepo extends JpaRepository<AddCategoryEntity, Integer> {
 
-    @Query("SELECT new com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO(a.id, a.category, a.display) " +
-           "FROM AddCategoryEntity a")
+    @Query("SELECT new com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO(a.id, a.category, a.display) FROM AddCategoryEntity a")
     List<GetAllCategoryOfCropsDTO> findAllCategories();
-   
+    
+    boolean existsByCategoryIgnoreCase(String category);
 }
 

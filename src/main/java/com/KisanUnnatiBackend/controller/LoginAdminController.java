@@ -12,20 +12,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.KisanUnnatiBackend.dto.LoginAdminDTO;
 import com.KisanUnnatiBackend.dto.NewAdminAddDTO;
-import com.KisanUnnatiBackend.entity.NewAdminAddEntity;
-import com.KisanUnnatiBackend.service.LoginAdminService;
+import com.KisanUnnatiBackend.entity.UserContactdetailsEntity;
+import com.KisanUnnatiBackend.entity.UserRegisterLoginEntity;
+import com.KisanUnnatiBackend.service.UserRegisterLoginService;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class LoginAdminController {
-	@Autowired
-	private LoginAdminService loginAdminService;
+//	@Autowired
+//	private LoginAdminService loginAdminService;
 	
+	@Autowired
+	private  UserRegisterLoginService userRegisterService;
 	
 	@GetMapping(path= {"/","/index","/login"})
 	public String index() {
@@ -41,17 +44,12 @@ public class LoginAdminController {
 	public String webName() {
 	    return "dashboard"; 
 	}
-
-	@GetMapping("cropManagement")
-	public String cropManagement(@RequestParam("name") String name, Model model) {
-		  model.addAttribute("name", name);
-	    return "cropsmanagement/cropManagement"; 
-	}
 	
 	
 	@PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginAdminDTO loginAdminDTO,
     		BindingResult bindingResult, Model model,  HttpSession session) {
+		
 		/* System.out.println(1); */
 		System.out.println(1);
 		 List<String> errorList=new ArrayList<>();
@@ -66,46 +64,57 @@ public class LoginAdminController {
 			 return "login";
 		}else {
 			System.out.println(3);
-			 NewAdminAddEntity loginAdmin = loginAdminService.loginAdmin(loginAdminDTO.getEmail(), loginAdminDTO.getPassword());
-			if(loginAdmin.getEmail() != null && loginAdmin.getName() != null && loginAdmin.getPosition() != 0) {
-				model.addAttribute("message", "Succesfull login");
-				session.setAttribute("adminEmail", loginAdmin.getEmail());
-				session.setAttribute("adminName", loginAdmin.getName());
-				session.setAttribute("adminPosition", String.valueOf(loginAdmin.getPosition()));
-				session.setAttribute("adminId", String.valueOf(loginAdmin.getId()));
-				System.out.println(4);
-				return "dashboard";
-			}else {
-				errorList.add("You are Enter wrong email and password");
-				model.addAttribute("errorList", errorList);
-			}
+			Optional<UserRegisterLoginEntity> optional=userRegisterService.loginAdmin(loginAdminDTO.getEmail(), loginAdminDTO.getPassword());
+			UserRegisterLoginEntity adminLoginInfo=optional.get();
+			UserContactdetailsEntity adminContactInfo=adminLoginInfo.getUserContactId();
+			 
+			 if(adminLoginInfo.getPosition()<=2) {
+				 if(adminLoginInfo.getEmail() != null && adminLoginInfo.getName() != null && adminLoginInfo.getPosition() != 0) {
+					 session.setAttribute("adminId", adminLoginInfo.getUserId());
+					 session.setAttribute("adminName", adminLoginInfo.getName());
+					 session.setAttribute("adminEmail", adminLoginInfo.getEmail());
+					 session.setAttribute("adminPosition", adminLoginInfo.getPosition());
+					 session.setAttribute("adminState", adminContactInfo.getStateName());
+					 session.setAttribute("adminDistrict", adminContactInfo.getDistrict());
+					 session.setAttribute("adminCity", adminContactInfo.getCity());
+					 session.setAttribute("adminAddress", adminContactInfo.getAddress());
+					 return "dashboard";
+				 }else {
+					 errorList.add("You are Enter wrong email and password");
+					 model.addAttribute("errorList", errorList);
+				 }	 
+			 }else {
+				 errorList.add("You are Not aligible this application");
+				 model.addAttribute("errorList", errorList);
+			 }
+			 
 			
 			
 		}
-		
-            return "login"; // index.jsp
+	     return "login"; // index.jsp
     }
 	
 	@PostMapping("/adminAdd")
 	public String adminAdd(@Valid @ModelAttribute NewAdminAddDTO newAdminAddDTO,
     		BindingResult bindingResult, Model model,  HttpSession session) {
-	  System.out.println("1");
-		 List<String> errorList=new ArrayList<>();
+		 	List<String> errorList=new ArrayList<>();
 			if(bindingResult.hasErrors()) {
 				 List<ObjectError> list=bindingResult.getAllErrors();
 				 for(ObjectError error:list) {
 					 System.out.println(error.getDefaultMessage());
 					 errorList.add(error.getDefaultMessage());
 				 }
-				 System.out.println("2");
 				 model.addAttribute("errorList",errorList);
 			}else {
-				if(session.getAttribute("adminId")!=null) {
-					String adminId=(String)session.getAttribute("adminId");
-					System.out.println("3");
-					if(newAdminAddDTO.getPassword().equals(newAdminAddDTO.getConfirmPassword())) {
+				Integer adminId= (Integer) session.getAttribute("adminId");
+				if(adminId!=null) {
+					Integer adminPosition=(Integer)session.getAttribute("adminPosition");
+					System.out.println("adminId = "+adminId);
+					System.out.println("adminPosition =  "+adminPosition);
+					System.out.println("newAdminAddDTO.getPosition()="+ newAdminAddDTO.getPosition());
+					if(adminPosition!=null && adminPosition<=2 && adminPosition<=newAdminAddDTO.getPosition()) {
 						try {
-							boolean result=loginAdminService.adminNewAdd(newAdminAddDTO, adminId);
+							boolean result=userRegisterService.newAdminAdd(adminId,newAdminAddDTO);
 							if(result==true) {
 								System.out.println("4");
 								model.addAttribute("message", "Succesfull add new admin");
@@ -115,9 +124,13 @@ public class LoginAdminController {
 						}catch (Exception e) {
 							model.addAttribute("errorMessage", "You are Enter wrong information, try again");
 						}
+						
 					}else {
-						model.addAttribute("errorMessage", "Password and Conform Password are not maching, try again");	
+	
+						model.addAttribute("errorMessage", "You are not aligible to add admin position"+newAdminAddDTO.getPosition()+"");	
 					}
+				}else {
+					model.addAttribute("errorMessage", "you are login first");	
 				}
 			}
 		

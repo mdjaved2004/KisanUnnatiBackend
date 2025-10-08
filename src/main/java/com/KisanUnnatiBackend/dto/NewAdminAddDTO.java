@@ -3,11 +3,14 @@ package com.KisanUnnatiBackend.dto;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -30,16 +33,15 @@ public class NewAdminAddDTO {
     		 message = "Enter a valid email address")
     private String email;
 
-    @NotBlank(message = "Mobile number is required")
-    @Pattern(regexp = "^[0-9]{10,12}$", message = "Mobile number must be 10 to 12 digits")
-    private String mobileNumber;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, max = 35, message = "Password must be between 6 and 35 characters")
     private String password;
     
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, max = 35, message = "Password must be between 6 and 35 characters")
-    private String confirmPassword;
+    
+    
+    @Min(value = 1, message = "Position must be at least 1")
+    @Max(value = 5, message = "Position must not be greater than 5")
+    private int position;
 }
 

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "crops_Information")
 @Data
-public class AddNewCropEntity {
+public class AddNewCropInfoEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +18,6 @@ public class AddNewCropEntity {
 
 	@Column(name = "cropName", nullable = false, length = 50)
 	private String cropName;
-
-	@Column(name = "price", nullable = false)
-	private int price;
 
 	@Column(name = "date", nullable = false)
 	private LocalDate date;
@@ -38,14 +35,17 @@ public class AddNewCropEntity {
 	@Column(name = "imageAddAdminId")
 	private int imageAddAdminId;
 
-	@Column(name = "countryId", nullable = false)
-	private int country;
-
-	@Column(name = "stateId", nullable = false)
-	private int state;
+	@Column(name = "state", nullable = false)
+	private String state;
 
 	@Column(name = "deletedDate")
 	private LocalDate deletedDate;
+    
+	@Column(name = "fileLink", nullable = true)
+	private String fileLink;
+	
+	@Column(name = "fileAddAdminId")
+	private int fileAddAdminId;
 
 	@Column(name = "display", nullable = false)
 	private boolean display = true;

@@ -9,6 +9,19 @@
 	<link href="css/dashboarMainSection.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+
+<%
+/* 		model.addAttribute("errorList", "Succesfull login"); */
+	String adminEmail=null, adminId=null, adminName=null;
+	int adminPosition=3;	
+	if (session.getAttribute("adminEmail")!= null) {
+		adminEmail=(String)session.getAttribute("adminEmail");
+		adminName=(String)session.getAttribute("adminName");
+		adminPosition=(Integer)session.getAttribute("adminPosition");
+		adminId=String.valueOf(session.getAttribute("adminId"));
+	}
+%>
+<%if(adminEmail !=null && adminName !=null && adminPosition<=2 && adminId !=null){ %>
 	<header>
 			<jsp:include page="../navigation_bar.jsp" />
 	</header>
@@ -28,14 +41,14 @@
 			   <td>Add new crops</td>
 			   <td>:</td>
 			   <td>
-			   		<a href="addNewCropsform" class="btn-link"><button class="btn">Add</button></a>
+			   		<a href="addNewCropsInfoForm" class="btn-link"><button class="btn">Add</button></a>
 			   </td>
 		  </tr>
 		  <tr>
 			    <td>Add new Category</td>
 			    <td>:</td>
 			    <td>
-			      	<a href="addCategoryForm" class="btn-link"><button class="btn">Add Category</button></a>
+			      	<a href="addCategoryInfoForm" class="btn-link"><button class="btn">Add Category</button></a>
 			    </td>
 		  </tr>
 		  <tr>
@@ -64,5 +77,8 @@
 	</main>
 	<!--footer-->
 	<jsp:include page="../footer.jsp" />
+<%}else{ %>
+	<p>Something went wrong, You are login</p>
+<% }%>
 </body>
 </html>

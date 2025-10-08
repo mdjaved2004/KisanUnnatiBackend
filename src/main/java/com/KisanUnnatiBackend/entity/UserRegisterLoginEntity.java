@@ -41,6 +41,9 @@ public class UserRegisterLoginEntity {
     @Column(name = "profileImage", nullable = true, length =250)
 	private String profileImage;
     
+    @Column(name = "updatePositionAdminId", nullable = true)
+    private int updatePositionAdminId=0;
+    
     @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "userContactId", referencedColumnName = "userContactId")
 	private UserContactdetailsEntity userContactId;

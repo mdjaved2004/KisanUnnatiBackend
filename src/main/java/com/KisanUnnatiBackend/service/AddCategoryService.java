@@ -7,28 +7,38 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO;
 import com.KisanUnnatiBackend.entity.AddCategoryEntity;
-import com.KisanUnnatiBackend.repo.AddCategoryRepo;
+import com.KisanUnnatiBackend.repo.CategoryAddInfoRepo;
+
 
 @Service
 public class AddCategoryService {
 
     @Autowired
-    private AddCategoryRepo addCategoryRepo;
+    private CategoryAddInfoRepo categoryAddInfoRepo;
+   
     // add new category
-    public boolean newCategoryAdd(@Valid String categoryOfCrops, String adminId) {
-        AddCategoryEntity addCategoryEntity = new AddCategoryEntity(); 
-
-        addCategoryEntity.setCategory(categoryOfCrops);
-        addCategoryEntity.setAdminId(Integer.parseInt(adminId));   
-        addCategoryEntity.setDate(LocalDate.now());
-
-        return addCategoryRepo.save(addCategoryEntity) != null;
+    @Transactional
+    public boolean newCategoryAdd(@Valid String categoryOfCrops, int adminId) {
+    	boolean valueReturn;
+    	boolean exists = categoryAddInfoRepo.existsByCategoryIgnoreCase(categoryOfCrops);
+    	if (exists) {
+    		valueReturn=false;
+        }else {
+        	AddCategoryEntity addCategoryEntity = new AddCategoryEntity(); 
+        	
+        	addCategoryEntity.setCategory(categoryOfCrops);
+        	addCategoryEntity.setAdminId(adminId);   
+        	addCategoryEntity.setDate(LocalDate.now());
+        	valueReturn= categoryAddInfoRepo.save(addCategoryEntity) != null;      	
+        }
+    	return valueReturn;
     }
     
     public List<GetAllCategoryOfCropsDTO> getAllCategoryOfCrops() {
-        return addCategoryRepo.findAllCategories();
+        return categoryAddInfoRepo.findAllCategories();
     }
 }

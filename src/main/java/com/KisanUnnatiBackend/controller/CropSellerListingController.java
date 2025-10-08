@@ -32,9 +32,8 @@ public class CropSellerListingController {
     }
 
     // Add a new crop
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addCrop(
-            @Validated @ModelAttribute CropSellerListingDTO cropDTO,
+    @PostMapping(value = "/addNewCropForSelling", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addCrop(@Validated @ModelAttribute CropSellerListingDTO cropDTO,
             BindingResult bindingResult,
             @RequestParam("image_input") MultipartFile imageFile,
             HttpSession session) {

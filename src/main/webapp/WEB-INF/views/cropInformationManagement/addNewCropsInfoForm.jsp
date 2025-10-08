@@ -13,7 +13,7 @@
 			<jsp:include page="../navigation_bar.jsp" />
 	</header>
 	<main id=main>
-		<form action="addNewCrop" method="post" enctype="multipart/form-data">
+		<form action="addNewCropInfo" method="post" enctype="multipart/form-data">
 	       	<p class="heading">Add New crop</p>
 	       	<c:forEach var="message"  items="${errorList}" >
 		    	<center style="color:red"><i>${message}</i></center><br>
@@ -38,41 +38,28 @@
 		               placeholder="Enter new crop name"
 		               maxlength="50" required>
 		    </div>
-		    
-		    <div class="form-group">
-		        <label for="price">Crop price:</label>
-		        <input type="number" id="price" name="price"
-		               pattern="[0-9]+"
-		               title="Only numbers (0-9) allowed."
-		               placeholder="Enter prise per kg" required>
-		    </div>
-			
-		    <!-- Country Select Field -->
-			<div class="form-group"> 
-			    <label for="country">Country:</label>
-			    <select id="country" name="country" required>
-			        <option value="" disabled selected hidden>Select Country</option>
-			        <option value="1">India</option>
-			    </select>
-			</div>
 			
 			<!-- State Select Field -->
 			<div class="form-group"> 
 			    <label for="state">State:</label>
-			   <input list="statesList" id="state" name="state" required placeholder="Select State" />
-				<datalist id="statesList">
-				    <c:forEach var="state" items="${stateAll}">
-				        <option value="${state.stateName}" data-id="${state.stateId}"></option>
-				    </c:forEach>
-				</datalist>
+			    <input list="statesList" id="state" name="state" required placeholder="Select State" />
+			    <datalist id="statesList">
+			        <c:forEach var="state" items="${stateAll}">
+			            <option value="${state}"></option>
+			        </c:forEach>
+			    </datalist>
 			</div>
 	        <jsp:include page="image_upload.jsp" />
 			
-			
-			<button type="submit" class="submit" onclick="return validateState()">Submit</button>
+			 <div class="form-group">
+			        <label for="file_input">Upload File:</label>
+			        <input type="file" id="file_input" name="file_input" accept=".txt" required>
+			        <small>Only .txt and .pdf files allowed.</small>
+			   </div>
+			<button type="submit" class="submit">Submit</button>
 	       </form>
      </main>
-	<script src="js/addNewCrops.js"></script>
+<!-- 	<script src="js/addNewCrops.js"></script> -->
 
 </body>
 </html>
