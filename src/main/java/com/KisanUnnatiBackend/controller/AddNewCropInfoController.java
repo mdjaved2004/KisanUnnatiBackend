@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.KisanUnnatiBackend.dto.AddCategoryDTO;
+
 import com.KisanUnnatiBackend.dto.AddNewCropInfoDTO;
 import com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO;
 //import com.KisanUnnatiBackend.entity.GetAllStateEntity;
