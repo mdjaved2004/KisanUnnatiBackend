@@ -50,6 +50,7 @@ public class CropSellerListingService {
             	
             	CropSellerListingEntity cropSellerListingEntity = new CropSellerListingEntity(); 
             	cropSellerListingEntity.setCropName(cropDTO.getCropName());
+            	cropSellerListingEntity.setCropCategory(cropDTO.getCropCategory());
             	cropSellerListingEntity.setPrice(cropDTO.getPrice());
             	cropSellerListingEntity.setQuantity(cropDTO.getQuantity());
             	cropSellerListingEntity.setTotalQuantity(cropDTO.getQuantity());

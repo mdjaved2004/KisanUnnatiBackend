@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import com.KisanUnnatiBackend.dto.AddCategoryDTO;
 import com.KisanUnnatiBackend.dto.GetAllCategoryOfCropsDTO;
 import com.KisanUnnatiBackend.service.AddCategoryService;
 
+@Controller
 public class AddNewCategoryInfoController {
 
 	
@@ -38,6 +40,7 @@ public class AddNewCategoryInfoController {
 	        BindingResult bindingResult,
 	        Model model,
 	        HttpSession session) {
+		System.out.println("===============================");
 
 	    List<GetAllCategoryOfCropsDTO> allCategoryOfCrops = addCategoryService.getAllCategoryOfCrops();
 	    model.addAttribute("categoryList", allCategoryOfCrops);

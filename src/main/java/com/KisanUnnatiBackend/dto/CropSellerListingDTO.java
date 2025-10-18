@@ -14,7 +14,10 @@ public class CropSellerListingDTO {
 	 	@NotBlank(message = "Crop name is required")
 	    @Size(max = 100, message = "Crop name must be less than 100 characters")
 	    private String cropName;
-
+        
+	 	@NotBlank(message = "CropCategory name is required")
+	 	private String cropCategory;
+	 	
 	    @NotBlank(message = "Seller name is required")
 	    @Size(max = 50, message = "Seller name must be less than 50 characters")
 	    private String sellerName;

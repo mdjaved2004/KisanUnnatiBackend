@@ -26,6 +26,9 @@ public class CropSellerListingEntity {
 
 	@Column(name = "crop_name", length = 100, nullable = false)
 	private String cropName;
+	
+	@Column(name = "cropCategory", length = 100, nullable = false)
+	private String cropCategory;
 
 //	@Column(name = "seller_name", length = 50, nullable = false)
 //	private String sellerName;
