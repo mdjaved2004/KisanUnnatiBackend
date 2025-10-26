@@ -39,6 +39,14 @@ public class UserRegisterLoginService {
 	private  FeedbackService feedbackService;
 	
 	@Transactional
+	public boolean registerUserCheck(String email) {  	
+	    //Check duplicate email
+	    if (userRegisterRepo.existsByEmail(email)) {
+	    	return true;
+	    }
+		return false;
+	}
+	@Transactional
 	public Map<String, Object> registerUser(UserRegisterDTO dto) {
 		String state=null, district=null, cityVillage=null;
 	    Map<String, Object> responseMap = new HashMap<>();

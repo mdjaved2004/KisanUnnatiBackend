@@ -42,7 +42,7 @@ public class UserRegisterLoginEntity {
 	private String profileImage;
     
     @Column(name = "updatePositionAdminId", nullable = true)
-    private int updatePositionAdminId=0;
+    private int updatePositionAdminId;
     
     @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "userContactId", referencedColumnName = "userContactId")

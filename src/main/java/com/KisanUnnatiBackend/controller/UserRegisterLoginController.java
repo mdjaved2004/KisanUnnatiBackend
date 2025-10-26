@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.KisanUnnatiBackend.dto.SendOtpDto;
 import com.KisanUnnatiBackend.dto.UserLoginDTO;
 import com.KisanUnnatiBackend.dto.UserRegisterDTO;
 import com.KisanUnnatiBackend.entity.UserContactdetailsEntity;
@@ -33,12 +34,11 @@ public class UserRegisterLoginController {
     private final UserRegisterLoginService userRegisterService;
     
     
-    @PostMapping(value = "/sendOtp", produces = "application/json")
+    @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<?> sendOtp(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult,
             HttpSession session) {
        
     	List<String> errorList = new ArrayList<>();
-    		System.out.println("================================");
         // Validation errors
         if (bindingResult.hasErrors()) {
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -53,26 +53,33 @@ public class UserRegisterLoginController {
                 return ResponseEntity.badRequest()
                         .body(Map.of("errors", "Password and confirmPassword do not match"));
             }else {
-            	int otp = (int) (Math.random() * 900000) + 100000;
-            	Send_mail send_mail = new Send_mail();
-                send_mail.mail_information(userRegisterDTO.getName(), userRegisterDTO.getEmail(), otp);
-            	
-                session.setAttribute("userName", userRegisterDTO.getName());
-                session.setAttribute("userEmail", userRegisterDTO.getEmail());
-                session.setAttribute("userState", userRegisterDTO.getState());
-                session.setAttribute("userDistrict", userRegisterDTO.getDistrict());
-                session.setAttribute("userCity", userRegisterDTO.getCityVillage());
-                session.setAttribute("userAddress", userRegisterDTO.getFullAddress());
-                session.setAttribute("userPhone", userRegisterDTO.getMobileNumber());
-                session.setAttribute("userOtp", otp);
-
-                Map<String, Object> sessionUserMap = getSessionUserMap(session);
-                sessionUserMap.put("userOtp", otp);
-                
-                System.out.println("===============successful==================");
-                return ResponseEntity.ok(Map.of(
-                        "user", sessionUserMap
-                   ));
+            	boolean result= userRegisterService.registerUserCheck(userRegisterDTO.getEmail());
+            	if(result==true) {
+            		return ResponseEntity.badRequest()
+                            .body(Map.of("errors", "You are already register,click to login"));
+            	}else {
+	            	int otp = (int) (Math.random() * 900000) + 100000;
+	            	String otp1=otp+"";
+	            	Send_mail send_mail = new Send_mail();
+	                send_mail.mail_information(userRegisterDTO.getName(), userRegisterDTO.getEmail(), otp);
+	            	
+	                session.setAttribute("userName", userRegisterDTO.getName());
+	                session.setAttribute("userEmail", userRegisterDTO.getEmail());
+	                session.setAttribute("userState", userRegisterDTO.getState());
+	                session.setAttribute("userDistrict", userRegisterDTO.getDistrict());
+	                session.setAttribute("userCity", userRegisterDTO.getCityVillage());
+	                session.setAttribute("userAddress", userRegisterDTO.getFullAddress());
+	                session.setAttribute("userPhone", userRegisterDTO.getMobileNumber());
+	                session.setAttribute("userPassword", userRegisterDTO.getPassword());
+	                session.setAttribute("userUserName", userRegisterDTO.getPassword());
+	                session.setAttribute("userOtp",otp1 );
+	
+	                Map<String, Object> sessionUserMap = getSessionUserMap(session);
+	                sessionUserMap.put("userOtp", otp1);
+	                return ResponseEntity.ok(Map.of(
+	                        "user", sessionUserMap
+	                   ));
+	             }
             }
 
         } catch (RuntimeException e) {
@@ -83,72 +90,53 @@ public class UserRegisterLoginController {
     }
     
     
-    
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, @RequestParam("otp") String otp, BindingResult bindingResult,
-            HttpSession session) {
-        List<String> errorList = new ArrayList<>();
-
-        String sessionOtp=session.getAttribute("userOtp").toString();
-        // Validation errors
-        if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorList.add(error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(Map.of("errors", errorList));
-        }else if(!sessionOtp.equalsIgnoreCase(otp)) {
+       
+    @PostMapping("/sendOtp")
+    public ResponseEntity<?> verifyOtp(@RequestBody SendOtpDto otpDTO, HttpSession session) {
+    	
+    	List<String> errorList = new ArrayList<>();
+    	
+    	String sessionOtp = (String) session.getAttribute("userOtp");
+        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
+        
+        userRegisterDTO.setName((String) session.getAttribute("userName"));
+        userRegisterDTO.setEmail((String) session.getAttribute("userEmail"));
+        userRegisterDTO.setPassword((String) session.getAttribute("userPassword"));
+        userRegisterDTO.setConfirmPassword((String) session.getAttribute("userPassword"));
+        userRegisterDTO.setState((String) session.getAttribute("userState"));
+        userRegisterDTO.setDistrict((String) session.getAttribute("userDistrict"));
+        userRegisterDTO.setCityVillage((String) session.getAttribute("userCity"));
+        userRegisterDTO.setFullAddress((String) session.getAttribute("userAddress"));
+        userRegisterDTO.setMobileNumber((String) session.getAttribute("userPhone"));
+        userRegisterDTO.setUserName((String) session.getAttribute("userUserName"));
+        
+        
+        System.out.println("=======================2========");
+        if (!sessionOtp.equals(otpDTO.getOtp())) {
+            return ResponseEntity.ok(Map.of(
+                    "errors", "You entered wrong OTP, try again"
+            ));
+        }
+        // Call service layer
+        try {
+        	Map<String, Object> information = userRegisterService.registerUser(userRegisterDTO);
+        	session.removeAttribute("userUserName");
+        	session.removeAttribute("userPassword");
+        }catch(Exception e){
         	return ResponseEntity.ok(Map.of(
-                    "message", "You are Enter Wrong otp, try again",
-                    "userName", userRegisterDTO.getName()
+                    "errors", "this email already exixst, click to login"
             ));
         }
 
-        try {
-            //Password match check
-            if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("errors", "Password and confirmPassword do not match"));
-            }
-            
-            	
-            //Call service layer
-            Map<String, Object> information = userRegisterService.registerUser(userRegisterDTO);
-            
-            //Set session attributes
-            UserRegisterLoginEntity userInfo = (UserRegisterLoginEntity) information.get("user");
-            if (userInfo != null) {
-                UserContactdetailsEntity userContactId = userInfo.getUserContactId();
-
-                session.setAttribute("userName", userInfo.getName());
-                session.setAttribute("userEmail", userInfo.getEmail());
-                session.setAttribute("userContactId", userContactId.getUserContactId());
-                session.setAttribute("userState", userContactId.getStateName());
-                session.setAttribute("userDistrict", userContactId.getDistrict());
-                session.setAttribute("userCity", userContactId.getCity());
-                session.setAttribute("userAddress", userContactId.getAddress());
-                session.setAttribute("userPhone", userContactId.getMobileNumber());
-
-                Map<String, Object> sessionUserMap = getSessionUserMap(session);
-                System.out.println("===============successful==================");
-                return ResponseEntity.ok(Map.of(
-                        "message", "User registered successfully",
-                        "user", sessionUserMap,
-                        "buyingCropInfo", information.get("buyingCropInfo"),
-                        "cropInformation", information.get("cropInformation"),
-                        "feedback",information.get("feedback")
-                ));
-            } else {
-                return ResponseEntity.ok(Map.of(
-                        "message", "Something went wrong, try again",
-                        "userName", userRegisterDTO.getName()
-                ));
-            }
-            } catch (RuntimeException e) {
-            errorList.add(e.getMessage());
-            return ResponseEntity.badRequest().body(Map.of("errors", errorList));
-        }
+        // Remove OTP from session
+        session.removeAttribute("userOtp");
+        System.out.println("===1====================1========");
+        return ResponseEntity.ok(Map.of(
+                "message", "User registered successfully"
+        ));
     }
-    
+
+
     
     
     
@@ -160,7 +148,6 @@ public class UserRegisterLoginController {
     // ------------------- LOGIN -------------------
     @PostMapping(value = "/login", produces = "application/json") 
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO, BindingResult bindingResult, HttpSession session) {
-    	System.out.println("bhn hjdjnjs================");
         List<String> errorList = new ArrayList<>();
         //Handle validation errors
         if (bindingResult.hasErrors()) {
@@ -174,7 +161,6 @@ public class UserRegisterLoginController {
         try {
             Map<String, Object> information = userRegisterService.loginUser(userLoginDTO.getEmail(), userLoginDTO.getPassword());
 
-            //Check if user exists
             UserRegisterLoginEntity user = (UserRegisterLoginEntity) information.get("user");
             if (user != null) {
                 UserContactdetailsEntity userContactId = user.getUserContactId();
@@ -190,7 +176,6 @@ public class UserRegisterLoginController {
                 session.setAttribute("userPhone", userContactId.getMobileNumber());
 
                 Map<String, Object> sessionUserMap = getSessionUserMap(session);
-                System.out.println("===============successful==================");
                 return ResponseEntity.ok(Map.of(
                         "message", "Login successful",
                         "user", sessionUserMap,
@@ -222,63 +207,5 @@ public class UserRegisterLoginController {
         return userMap;
     }   
     
-//    @PostMapping("/register")
-//    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult,
-//    		HttpSession session) {
-//    	
-//    	List<String> errorList = new ArrayList<>();
-//    	
-//    	// Validation errors
-//    	if (bindingResult.hasErrors()) {
-//    		for (ObjectError error : bindingResult.getAllErrors()) {
-//    			errorList.add(error.getDefaultMessage());
-//    		}
-//    		return ResponseEntity.badRequest().body(Map.of("errors", errorList));
-//    	}
-//    	
-//    	try {
-//    		//Password match check
-//    		if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())) {
-//    			return ResponseEntity.badRequest()
-//    					.body(Map.of("errors", "Password and confirmPassword do not match"));
-//    		}
-//    		
-//    		//Call service layer
-//    		Map<String, Object> information = userRegisterService.registerUser(userRegisterDTO);
-//    		
-//    		//Set session attributes
-//    		UserRegisterLoginEntity userInfo = (UserRegisterLoginEntity) information.get("user");
-//    		if (userInfo != null) {
-//    			UserContactdetailsEntity userContactId = userInfo.getUserContactId();
-//    			
-//    			session.setAttribute("userName", userInfo.getName());
-//    			session.setAttribute("userEmail", userInfo.getEmail());
-//    			session.setAttribute("userContactId", userContactId.getUserContactId());
-//    			session.setAttribute("userState", userContactId.getStateName());
-//    			session.setAttribute("userDistrict", userContactId.getDistrict());
-//    			session.setAttribute("userCity", userContactId.getCity());
-//    			session.setAttribute("userAddress", userContactId.getAddress());
-//    			session.setAttribute("userPhone", userContactId.getMobileNumber());
-//    			
-//    			Map<String, Object> sessionUserMap = getSessionUserMap(session);
-//    			System.out.println("===============successful==================");
-//    			return ResponseEntity.ok(Map.of(
-//    					"message", "User registered successfully",
-//    					"user", sessionUserMap,
-//    					"buyingCropInfo", information.get("buyingCropInfo"),
-//    					"cropInformation", information.get("cropInformation"),
-//    					"feedback",information.get("feedback")
-//    					));
-//    		} else {
-//    			return ResponseEntity.ok(Map.of(
-//    					"message", "Something went wrong, try again",
-//    					"userName", userRegisterDTO.getName()
-//    					));
-//    		}
-//    		
-//    	} catch (RuntimeException e) {
-//    		errorList.add(e.getMessage());
-//    		return ResponseEntity.badRequest().body(Map.of("errors", errorList));
-//    	}
-//    }
+
 }
